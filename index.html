@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Valentine 💖</title>
+  <title> Sujipan💖Mathusa</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,7 @@
       align-items:center;
       justify-content:center;
       position:relative;
-      touch-action: none; /* important for mobile smooth touch */
+      touch-action: none;
     }
 
     body::before{
@@ -111,7 +111,7 @@
       margin: 10px 0 8px;
       text-align:center;
       color: var(--text);
-      font-size: clamp(24px, 4vw, 38px);
+      font-size: clamp(24px, 4vw, 40px);
       letter-spacing: -0.4px;
     }
     p{
@@ -151,6 +151,7 @@
       overflow:hidden;
       box-shadow: 0 14px 30px rgba(0,0,0,.25);
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .btn:focus-visible{
       box-shadow: 0 0 0 4px rgba(255,59,122,.20), 0 14px 30px rgba(0,0,0,.25);
@@ -173,7 +174,7 @@
       margin-top: 16px;
       text-align:center;
       color: rgba(255,255,255,.95);
-      font-weight: 700;
+      font-weight: 800;
       padding: 14px 16px;
       border-radius: 16px;
       background: rgba(255,59,122,.12);
@@ -186,7 +187,7 @@
       to{ opacity:1; transform: translateY(0) scale(1); }
     }
 
-    /* ✅ Real NO button fixed so it can move anywhere */
+    /* ✅ Real NO button (moves anywhere on screen) */
     #noBtn{
       position: fixed;
       left: 0; top: 0;
@@ -215,6 +216,20 @@
       font-size: 12px;
       color: rgba(255,255,255,.55);
     }
+
+    .shine{
+      display:inline-block;
+      background: linear-gradient(90deg, rgba(255,255,255,.25), rgba(255,255,255,.95), rgba(255,255,255,.25));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 2.6s ease-in-out infinite;
+    }
+    @keyframes shimmer{
+      0%{ filter: drop-shadow(0 0 0 rgba(255,255,255,0)); opacity: .92; }
+      50%{ filter: drop-shadow(0 10px 18px rgba(255,59,122,.20)); opacity: 1; }
+      100%{ filter: drop-shadow(0 0 0 rgba(255,255,255,0)); opacity: .92; }
+    }
   </style>
 </head>
 
@@ -226,12 +241,12 @@
   <div class="wrap">
     <div class="card">
       <div class="top">
-        <div class="badge">💌 A tiny question</div>
-        <div class="badge">✨ Just for you</div>
+        <div class="badge">💌 For <span class="shine">Mathusa</span></div>
+        <div class="badge">✨ Surprise inside</div>
       </div>
 
-      <h1>Will you be my Valentine?</h1>
-      <p>One click. No pressure. Just a smile 😊</p>
+      <h1>Mathusa, will you be my Valentine? 💖</h1>
+      <p>Just one click… and a big smile 😊</p>
 
       <div class="divider"></div>
 
@@ -239,145 +254,95 @@
         <button class="btn btn-primary" id="yesBtn">Yes 💖</button>
       </div>
 
-      <div class="msg" id="msg">Yay! 😍💖 I’m so happy you said YES!</div>
-      <div class="footerHint">Tip: Try to tap “No” 😄</div>
+      <div class="msg" id="msg">Yay Mathusa! 😍💖 You made my day!</div>
+      <div class="footerHint">Try tapping “No” 😄</div>
     </div>
   </div>
 
   <!-- ✅ Real NO button -->
-  <button class="btn btn-ghost" id="noBtn">No 🙈</button>
+  <button class="btn btn-ghost" id="noBtn" aria-label="No button">No 🙈</button>
 
   <script>
     const yesBtn = document.getElementById("yesBtn");
     const noBtn  = document.getElementById("noBtn");
     const msg    = document.getElementById("msg");
 
-    let pos = { x: 0, y: 0 };
-    let lastMove = 0;
-    let moving = false;
+    // helpers
+    const clamp = (v, min, max) => Math.max(min, Math.min(v, max));
+    const rand  = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-    const clamp = (v,min,max) => Math.max(min, Math.min(v,max));
-    const rand  = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
+    // position state
+    let pos = { x: 12, y: 12 };
+    let lastJump = 0;
+    let locked = false;
 
-    function bounds(){
-      const bw = noBtn.offsetWidth;
-      const bh = noBtn.offsetHeight;
-      const maxX = window.innerWidth  - bw - 12;
-      const maxY = window.innerHeight - bh - 12;
-      return { bw, bh, maxX: Math.max(12, maxX), maxY: Math.max(12, maxY) };
+    function getBounds(){
+      const bw = noBtn.offsetWidth || 120;
+      const bh = noBtn.offsetHeight || 44;
+      const maxX = Math.max(12, window.innerWidth  - bw - 12);
+      const maxY = Math.max(12, window.innerHeight - bh - 12);
+      return { maxX, maxY };
     }
 
-    function applyPos(x,y){
+    function setPos(x, y, smooth = true){
+      const b = getBounds();
+      x = clamp(x, 12, b.maxX);
+      y = clamp(y, 12, b.maxY);
       pos.x = x; pos.y = y;
-      noBtn.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+
+      // reliable on mobile
+      noBtn.style.transition = smooth ? "transform 420ms cubic-bezier(0.16, 1, 0.3, 1)" : "none";
+      noBtn.style.transform  = `translate3d(${x}px, ${y}px, 0)`;
     }
 
     function placeNoNearYes(){
       const r = yesBtn.getBoundingClientRect();
-      const b = bounds();
-      const x = clamp(r.right + 14, 12, b.maxX);
-      const y = clamp(r.top, 12, b.maxY);
-      applyPos(x,y);
+      setPos(r.right + 14, r.top, false);
     }
 
-    // ✅ PREMIUM SMOOTH (fast enough to see, slow enough to feel premium)
-    function animateTo(x, y){
-      const b = bounds();
-      x = clamp(x, 12, b.maxX);
-      y = clamp(y, 12, b.maxY);
+    // smarter random: avoid center near YES area
+    function moveRandom(smooth = true){
+      if (locked) return;
 
-      // throttle if too frequent
       const now = performance.now();
-      if (now - lastMove < 140) return;
-      lastMove = now;
+      if (now - lastJump < 90) return; // throttle
+      lastJump = now;
 
-      moving = true;
-      noBtn.animate(
-        [
-          { transform: `translate3d(${pos.x}px, ${pos.y}px, 0)` },
-          { transform: `translate3d(${x}px, ${y}px, 0)` }
-        ],
-        {
-          duration: 360,
-          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-          fill: "forwards"
-        }
-      ).onfinish = () => {
-        applyPos(x,y);
-        moving = false;
-      };
-    }
+      const b = getBounds();
+      const tries = 8;
 
-    function moveRandom(){
-      if (moving) return;
-      const b = bounds();
-      animateTo(rand(12, b.maxX), rand(12, b.maxY));
+      const yesR = yesBtn.getBoundingClientRect();
+      const avoidX = yesR.left + yesR.width / 2;
+      const avoidY = yesR.top  + yesR.height/ 2;
+
+      let best = { x: rand(12, b.maxX), y: rand(12, b.maxY), d: -1 };
+
+      for(let i=0;i<tries;i++){
+        const x = rand(12, b.maxX);
+        const y = rand(12, b.maxY);
+        const d = Math.hypot(x - avoidX, y - avoidY);
+        if (d > best.d) best = { x, y, d };
+      }
+
+      setPos(best.x, best.y, smooth);
     }
 
     function distToNo(px, py){
       const r = noBtn.getBoundingClientRect();
-      const cx = r.left + r.width/2;
-      const cy = r.top  + r.height/2;
+      const cx = r.left + r.width / 2;
+      const cy = r.top  + r.height/ 2;
       return Math.hypot(px - cx, py - cy);
     }
 
-    // ✅ Works on desktop
-    function onMouseMove(e){
-      const d = distToNo(e.clientX, e.clientY);
-      if(d < 170) noBtn.classList.add("near"); else noBtn.classList.remove("near");
-      if(d < 135) moveRandom();
+    function dodgeIfNear(px, py){
+      const d = distToNo(px, py);
+      if (d < 170) noBtn.classList.add("near");
+      else noBtn.classList.remove("near");
+
+      if (d < 140) moveRandom(true);
     }
 
-    // ✅ Works on mobile (finger near = escape)
-    function onTouchMove(e){
-      if(!e.touches || !e.touches[0]) return;
-      const t = e.touches[0];
-      const d = distToNo(t.clientX, t.clientY);
-      if(d < 170) noBtn.classList.add("near"); else noBtn.classList.remove("near");
-      if(d < 140) moveRandom();
-    }
-
-    // ✅ Optional: phone tilt = slight dodge (premium feel)
-    function enableGyro(){
-      if(!window.DeviceOrientationEvent) return;
-
-      const startGyro = () => {
-        window.addEventListener("deviceorientation", (e) => {
-          // gamma = left-right, beta = front-back
-          const g = e.gamma || 0;
-          const b = e.beta  || 0;
-          // small tilt -> small movement
-          const nx = pos.x + clamp(g, -12, 12) * 1.2;
-          const ny = pos.y + clamp(b, -10, 10) * 0.9;
-          animateTo(nx, ny);
-        }, { passive:true });
-      };
-
-      // iOS permission
-      if (typeof DeviceOrientationEvent.requestPermission === "function") {
-        const ask = document.createElement("button");
-        ask.className = "btn btn-ghost";
-        ask.textContent = "Enable Motion ✨";
-        ask.style.position = "fixed";
-        ask.style.right = "14px";
-        ask.style.bottom = "14px";
-        ask.style.zIndex = "10001";
-        document.body.appendChild(ask);
-
-        ask.addEventListener("click", async () => {
-          try{
-            const res = await DeviceOrientationEvent.requestPermission();
-            if(res === "granted"){
-              startGyro();
-              ask.remove();
-            }
-          }catch(_){}
-        });
-      } else {
-        startGyro();
-      }
-    }
-
+    // confetti
     function confettiBurst(){
       for(let i=0;i<120;i++){
         const c = document.createElement("div");
@@ -399,36 +364,44 @@
       }
     }
 
+    // ✅ super-reliable “tap” events for mobile
+    function attachNoEscapeEvents(){
+      const jump = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        moveRandom(true);
+      };
+
+      // pointerdown works on most modern mobile/desktop
+      noBtn.addEventListener("pointerdown", jump, { passive:false });
+      // fallback (older)
+      noBtn.addEventListener("touchstart", jump, { passive:false });
+      noBtn.addEventListener("click", jump);
+
+      // extra: if finger/mouse comes near
+      window.addEventListener("mousemove", (e)=> dodgeIfNear(e.clientX, e.clientY), { passive:true });
+      window.addEventListener("touchmove", (e)=> {
+        if(!e.touches || !e.touches[0]) return;
+        dodgeIfNear(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive:true });
+    }
+
     window.addEventListener("load", () => {
       placeNoNearYes();
-
-      // desktop
-      window.addEventListener("mousemove", onMouseMove, { passive:true });
-
-      // mobile
-      window.addEventListener("touchmove", onTouchMove, { passive:false });
+      attachNoEscapeEvents();
 
       window.addEventListener("resize", () => {
-        const b = bounds();
-        applyPos(clamp(pos.x, 12, b.maxX), clamp(pos.y, 12, b.maxY));
+        const b = getBounds();
+        setPos(clamp(pos.x, 12, b.maxX), clamp(pos.y, 12, b.maxY), false);
       });
 
-      // escape on interactions
-      noBtn.addEventListener("mouseenter", moveRandom);
-      noBtn.addEventListener("click", (e)=>{ e.preventDefault(); moveRandom(); });
-      noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); moveRandom(); }, { passive:false });
-
-      // motion (optional premium)
-      enableGyro();
-
+      // yes action
       yesBtn.addEventListener("click", () => {
         msg.style.display = "block";
         confettiBurst();
 
-        window.removeEventListener("mousemove", onMouseMove);
-        window.removeEventListener("touchmove", onTouchMove);
-
-        noBtn.style.opacity = "0.2";
+        locked = true; // stop dodging now
+        noBtn.style.opacity = "0.18";
         noBtn.style.pointerEvents = "none";
         yesBtn.style.transform = "scale(1.06)";
       });
@@ -436,4 +409,3 @@
   </script>
 </body>
 </html>
-
