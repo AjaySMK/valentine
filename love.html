@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Valentine 💖</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#120a1a;
+      --card: rgba(255,255,255,.08);
+      --cardBorder: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --pink:#ff3b7a;
+      --pink2:#ff7aa8;
+      --shadow: 0 24px 80px rgba(0,0,0,.45);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      overflow:hidden;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 15% 20%, rgba(255,59,122,.22), transparent 55%),
+        radial-gradient(900px 600px at 85% 30%, rgba(122,166,255,.20), transparent 55%),
+        radial-gradient(900px 650px at 50% 90%, rgba(255,211,107,.18), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      touch-action: none; /* important for mobile smooth touch */
+    }
+
+    body::before{
+      content:"";
+      position:absolute; inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 42px 42px;
+      opacity:.25;
+      pointer-events:none;
+    }
+
+    .orb{
+      position:absolute;
+      width:280px; height:280px;
+      border-radius:999px;
+      filter: blur(40px);
+      opacity:.55;
+      animation: floaty 10s ease-in-out infinite;
+      pointer-events:none;
+      z-index:0;
+    }
+    .o1{ background: rgba(255,59,122,.65); left:-80px; top: 40px; }
+    .o2{ background: rgba(122,166,255,.60); right:-110px; top: 120px; animation-duration: 12s; }
+    .o3{ background: rgba(255,211,107,.58); left: 35%; bottom:-140px; animation-duration: 14s; }
+    @keyframes floaty{
+      0%,100%{ transform: translate(0,0) scale(1); }
+      50%{ transform: translate(18px,-14px) scale(1.06); }
+    }
+
+    .wrap{
+      width:min(720px, 92vw);
+      position:relative;
+      z-index:2;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--cardBorder);
+      border-radius: 24px;
+      padding: 28px 26px 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      justify-content:center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    h1{
+      margin: 10px 0 8px;
+      text-align:center;
+      color: var(--text);
+      font-size: clamp(24px, 4vw, 38px);
+      letter-spacing: -0.4px;
+    }
+    p{
+      margin:0;
+      text-align:center;
+      color: var(--muted);
+      font-size: clamp(14px, 2.2vw, 17px);
+      line-height: 1.45;
+    }
+
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+      margin: 18px 0 18px;
+    }
+
+    .actions{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top: 6px;
+    }
+
+    .btn{
+      border:0;
+      cursor:pointer;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: .2px;
+      transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+      user-select:none;
+      outline: none;
+      position: relative;
+      overflow:hidden;
+      box-shadow: 0 14px 30px rgba(0,0,0,.25);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:focus-visible{
+      box-shadow: 0 0 0 4px rgba(255,59,122,.20), 0 14px 30px rgba(0,0,0,.25);
+    }
+    .btn:hover{ transform: translateY(-3px); filter: brightness(1.03); }
+    .btn:active{ transform: translateY(-1px) scale(.99); }
+
+    .btn-primary{
+      color:#fff;
+      background: linear-gradient(45deg, var(--pink), var(--pink2));
+    }
+    .btn-ghost{
+      color: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.16);
+    }
+
+    .msg{
+      display:none;
+      margin-top: 16px;
+      text-align:center;
+      color: rgba(255,255,255,.95);
+      font-weight: 700;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,59,122,.12);
+      border: 1px solid rgba(255,59,122,.22);
+      animation: pop .6s ease forwards;
+      opacity:0;
+    }
+    @keyframes pop{
+      from{ opacity:0; transform: translateY(12px) scale(.98); }
+      to{ opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    /* ✅ Real NO button fixed so it can move anywhere */
+    #noBtn{
+      position: fixed;
+      left: 0; top: 0;
+      z-index: 9999;
+      will-change: transform;
+      transition: none;
+      touch-action: none;
+    }
+    #noBtn.near{
+      box-shadow: 0 0 0 5px rgba(255,59,122,.16), 0 16px 34px rgba(0,0,0,.35);
+    }
+
+    .confetti{
+      position: fixed;
+      top: -20px;
+      width: 10px;
+      height: 10px;
+      z-index: 10000;
+      pointer-events:none;
+      opacity: 0;
+    }
+
+    .footerHint{
+      margin-top: 12px;
+      text-align:center;
+      font-size: 12px;
+      color: rgba(255,255,255,.55);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div class="badge">💌 A tiny question</div>
+        <div class="badge">✨ Just for you</div>
+      </div>
+
+      <h1>Will you be my Valentine?</h1>
+      <p>One click. No pressure. Just a smile 😊</p>
+
+      <div class="divider"></div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="yesBtn">Yes 💖</button>
+      </div>
+
+      <div class="msg" id="msg">Yay! 😍💖 I’m so happy you said YES!</div>
+      <div class="footerHint">Tip: Try to tap “No” 😄</div>
+    </div>
+  </div>
+
+  <!-- ✅ Real NO button -->
+  <button class="btn btn-ghost" id="noBtn">No 🙈</button>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn  = document.getElementById("noBtn");
+    const msg    = document.getElementById("msg");
+
+    let pos = { x: 0, y: 0 };
+    let lastMove = 0;
+    let moving = false;
+
+    const clamp = (v,min,max) => Math.max(min, Math.min(v,max));
+    const rand  = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
+
+    function bounds(){
+      const bw = noBtn.offsetWidth;
+      const bh = noBtn.offsetHeight;
+      const maxX = window.innerWidth  - bw - 12;
+      const maxY = window.innerHeight - bh - 12;
+      return { bw, bh, maxX: Math.max(12, maxX), maxY: Math.max(12, maxY) };
+    }
+
+    function applyPos(x,y){
+      pos.x = x; pos.y = y;
+      noBtn.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    }
+
+    function placeNoNearYes(){
+      const r = yesBtn.getBoundingClientRect();
+      const b = bounds();
+      const x = clamp(r.right + 14, 12, b.maxX);
+      const y = clamp(r.top, 12, b.maxY);
+      applyPos(x,y);
+    }
+
+    // ✅ PREMIUM SMOOTH (fast enough to see, slow enough to feel premium)
+    function animateTo(x, y){
+      const b = bounds();
+      x = clamp(x, 12, b.maxX);
+      y = clamp(y, 12, b.maxY);
+
+      // throttle if too frequent
+      const now = performance.now();
+      if (now - lastMove < 140) return;
+      lastMove = now;
+
+      moving = true;
+      noBtn.animate(
+        [
+          { transform: `translate3d(${pos.x}px, ${pos.y}px, 0)` },
+          { transform: `translate3d(${x}px, ${y}px, 0)` }
+        ],
+        {
+          duration: 360,
+          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+          fill: "forwards"
+        }
+      ).onfinish = () => {
+        applyPos(x,y);
+        moving = false;
+      };
+    }
+
+    function moveRandom(){
+      if (moving) return;
+      const b = bounds();
+      animateTo(rand(12, b.maxX), rand(12, b.maxY));
+    }
+
+    function distToNo(px, py){
+      const r = noBtn.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top  + r.height/2;
+      return Math.hypot(px - cx, py - cy);
+    }
+
+    // ✅ Works on desktop
+    function onMouseMove(e){
+      const d = distToNo(e.clientX, e.clientY);
+      if(d < 170) noBtn.classList.add("near"); else noBtn.classList.remove("near");
+      if(d < 135) moveRandom();
+    }
+
+    // ✅ Works on mobile (finger near = escape)
+    function onTouchMove(e){
+      if(!e.touches || !e.touches[0]) return;
+      const t = e.touches[0];
+      const d = distToNo(t.clientX, t.clientY);
+      if(d < 170) noBtn.classList.add("near"); else noBtn.classList.remove("near");
+      if(d < 140) moveRandom();
+    }
+
+    // ✅ Optional: phone tilt = slight dodge (premium feel)
+    function enableGyro(){
+      if(!window.DeviceOrientationEvent) return;
+
+      const startGyro = () => {
+        window.addEventListener("deviceorientation", (e) => {
+          // gamma = left-right, beta = front-back
+          const g = e.gamma || 0;
+          const b = e.beta  || 0;
+          // small tilt -> small movement
+          const nx = pos.x + clamp(g, -12, 12) * 1.2;
+          const ny = pos.y + clamp(b, -10, 10) * 0.9;
+          animateTo(nx, ny);
+        }, { passive:true });
+      };
+
+      // iOS permission
+      if (typeof DeviceOrientationEvent.requestPermission === "function") {
+        const ask = document.createElement("button");
+        ask.className = "btn btn-ghost";
+        ask.textContent = "Enable Motion ✨";
+        ask.style.position = "fixed";
+        ask.style.right = "14px";
+        ask.style.bottom = "14px";
+        ask.style.zIndex = "10001";
+        document.body.appendChild(ask);
+
+        ask.addEventListener("click", async () => {
+          try{
+            const res = await DeviceOrientationEvent.requestPermission();
+            if(res === "granted"){
+              startGyro();
+              ask.remove();
+            }
+          }catch(_){}
+        });
+      } else {
+        startGyro();
+      }
+    }
+
+    function confettiBurst(){
+      for(let i=0;i<120;i++){
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = (Math.random()*100) + "vw";
+        const size = (Math.random()*8 + 5);
+        c.style.width = size + "px";
+        c.style.height = size + "px";
+        c.style.background = `hsl(${Math.random()*360}, 100%, 70%)`;
+        if(Math.random() > 0.5) c.style.borderRadius = "50%";
+        document.body.appendChild(c);
+
+        const anim = c.animate([
+          { transform: "translateY(0) rotate(0deg)", opacity: 1 },
+          { transform: `translateY(${Math.random()*100 + 120}vh) rotate(${Math.random()*720}deg)`, opacity: 0 }
+        ], { duration: Math.random()*2800 + 2200, easing: "cubic-bezier(0.215, 0.610, 0.355, 1)" });
+
+        anim.onfinish = () => c.remove();
+      }
+    }
+
+    window.addEventListener("load", () => {
+      placeNoNearYes();
+
+      // desktop
+      window.addEventListener("mousemove", onMouseMove, { passive:true });
+
+      // mobile
+      window.addEventListener("touchmove", onTouchMove, { passive:false });
+
+      window.addEventListener("resize", () => {
+        const b = bounds();
+        applyPos(clamp(pos.x, 12, b.maxX), clamp(pos.y, 12, b.maxY));
+      });
+
+      // escape on interactions
+      noBtn.addEventListener("mouseenter", moveRandom);
+      noBtn.addEventListener("click", (e)=>{ e.preventDefault(); moveRandom(); });
+      noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); moveRandom(); }, { passive:false });
+
+      // motion (optional premium)
+      enableGyro();
+
+      yesBtn.addEventListener("click", () => {
+        msg.style.display = "block";
+        confettiBurst();
+
+        window.removeEventListener("mousemove", onMouseMove);
+        window.removeEventListener("touchmove", onTouchMove);
+
+        noBtn.style.opacity = "0.2";
+        noBtn.style.pointerEvents = "none";
+        yesBtn.style.transform = "scale(1.06)";
+      });
+    });
+  </script>
+</body>
+</html>
